@@ -52,7 +52,6 @@ export default function ContactPage() {
     }
   ];
 
-  // Handles the form submission by popping open the user's email client
   const handleTransmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -71,10 +70,11 @@ export default function ContactPage() {
         <Scene />
       </div>
 
+      {/* Main Content Container - ANIMATION ADDED HERE */}
       <div style={{ 
           position: 'relative', zIndex: 10, paddingTop: '180px', paddingBottom: '100px', 
-          maxWidth: '1200px', /* Widened to fit the new 2-column layout */
-          width: '90%', margin: '0 auto',
+          maxWidth: '1200px', width: '90%', margin: '0 auto',
+          animation: 'cyber-boot 0.4s ease-out forwards' /* THE FIX */
       }}>
         
         {/* HEADER */}

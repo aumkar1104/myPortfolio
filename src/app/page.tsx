@@ -27,7 +27,6 @@ export default function Home() {
 
   // ==========================================
   // BULLETPROOF ANIMATION MATH
-  // Expanded windows so nothing fades out by accident!
   // ==========================================
   
   // 1. Hero: Fades out quickly (0 to 400px)
@@ -101,10 +100,6 @@ export default function Home() {
       <Navbar />
       {BackgroundScene}
 
-      {/* =======================================================
-          PERFECTLY CENTERED ANCHORS
-          These are placed exactly in the middle of the Math windows above.
-         ======================================================= */}
       <div id="about" style={{ position: 'absolute', top: '1500px' }} />
       <div id="work" style={{ position: 'absolute', top: '3000px' }} />
       <div id="contact" style={{ position: 'absolute', top: '4200px' }} />
@@ -113,37 +108,45 @@ export default function Home() {
       <div style={{
           height: '100vh', width: '100%',
           position: 'fixed', top: 0, left: 0,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           zIndex: 10,
           opacity: heroOpacity, 
           pointerEvents: heroOpacity <= 0 ? 'none' : 'auto',
           willChange: 'opacity'
       }}>
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-          width: '380px', height: '450px',
-          opacity: isHovered ? 1 : 0, transition: 'opacity 0.8s ease-out', pointerEvents: 'none',
-          zIndex: 0, borderRadius: '50%', overflow: 'hidden', boxShadow: 'inset 0 0 80px 60px rgba(0,0,0,0.9)',
+        <div style={{ 
+            width: '100%', height: '100%', position: 'relative',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', 
+            animation: 'cyber-boot 0.8s ease-out forwards' 
         }}>
-          <img src="/portrait.png" alt="Portrait" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: isHovered ? 'scale(1.05)' : 'scale(1)', transition: 'transform 6s ease-out' }} />
-        </div>
-        <div 
-          onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
-          style={{ textAlign: 'center', cursor: 'default', zIndex: 20, padding: '60px', position: 'relative' }}
-        >
-          <h1 style={{ fontSize: 'clamp(4rem, 10vw, 8rem)', margin: 0, letterSpacing: '-4px', fontWeight: '900', lineHeight: '0.9', color: 'white', opacity: isHovered ? 0 : 1, transition: 'opacity 0.6s ease' }}>
-            A AUMKAR
-          </h1>
-          <p style={{ marginTop: '20px', fontSize: '1rem', letterSpacing: '8px', color: '#aaa', textTransform: 'uppercase', opacity: isHovered ? 0 : 1, transition: 'opacity 0.4s ease' }}>
-            CS Engineer
-          </p>
-        </div>
-        <div style={{
-          position: 'absolute', bottom: '50px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#666', letterSpacing: '2px',
-          opacity: isHovered ? 0 : 1, transition: 'opacity 0.5s', pointerEvents: 'none', animation: 'pulse 2s infinite' 
-        }}>
-          {`> SYSTEM_LOCKED // SCROLL_TO_UNLOCK`}
-          <span style={{ display: 'inline-block', width: '8px', height: '15px', backgroundColor: 'white', marginLeft: '10px', verticalAlign: 'middle', animation: 'blink 1s infinite' }}></span>
+            <div style={{
+              position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+              width: '380px', height: '450px',
+              opacity: isHovered ? 1 : 0, transition: 'opacity 0.8s ease-out', pointerEvents: 'none',
+              zIndex: 0, borderRadius: '50%', overflow: 'hidden', boxShadow: 'inset 0 0 80px 60px rgba(0,0,0,0.9)',
+            }}>
+              <img src="/portrait.png" alt="Portrait" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: isHovered ? 'scale(1.05)' : 'scale(1)', transition: 'transform 6s ease-out' }} />
+            </div>
+            <div 
+              onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
+              style={{ textAlign: 'center', cursor: 'default', zIndex: 20, padding: '60px', position: 'relative' }}
+            >
+              <h1 style={{ fontSize: 'clamp(4rem, 10vw, 8rem)', margin: 0, letterSpacing: '-4px', fontWeight: '900', lineHeight: '0.9', color: 'white', opacity: isHovered ? 0 : 1, transition: 'opacity 0.6s ease' }}>
+                A AUMKAR
+              </h1>
+              <p style={{ marginTop: '20px', fontSize: '1rem', letterSpacing: '8px', color: '#00ccff', textTransform: 'uppercase', opacity: isHovered ? 0 : 1, transition: 'opacity 0.4s ease' }}>
+                CS Engineer
+              </p>
+            </div>
+            
+            {/* THE FIX: Forced 100% width with textAlign center for pixel-perfect alignment */}
+            <div style={{
+              position: 'absolute', bottom: '50px', width: '100%', textAlign: 'center',
+              fontFamily: 'monospace', fontSize: '0.8rem', color: '#666', letterSpacing: '2px',
+              opacity: isHovered ? 0 : 1, transition: 'opacity 0.5s', pointerEvents: 'none', animation: 'pulse 2s infinite'
+            }}>
+              {`> SYSTEM_LOCKED // SCROLL_TO_UNLOCK`}
+              <span style={{ display: 'inline-block', width: '8px', height: '15px', backgroundColor: 'white', marginLeft: '10px', verticalAlign: 'middle', animation: 'blink 1s infinite' }}></span>
+            </div>
         </div>
       </div>
 
@@ -165,7 +168,6 @@ export default function Home() {
             transform: `translateY(${dashboardLift}px)`, 
             boxShadow: '0 0 80px rgba(0,0,0,0.8)'
         }}>
-            {/* Corners */}
             <div style={{ position: 'absolute', top: '-2px', left: '-2px', width: '30px', height: '30px', borderTop: '4px solid white', borderLeft: '4px solid white' }}></div>
             <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '30px', height: '30px', borderBottom: '4px solid white', borderRight: '4px solid white' }}></div>
 
@@ -190,7 +192,6 @@ export default function Home() {
                     </div>
                 </div>
                 
-                {/* RIGHT COLUMN: Skills & Tools */}
                 <div>
                      <div style={{ marginBottom: '15px', fontSize: '0.9rem', color: '#888', fontFamily: 'monospace', letterSpacing: '2px' }}>// TECHNICAL ARSENAL</div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '30px' }}>
@@ -250,20 +251,11 @@ export default function Home() {
         padding: '100px 40px',
         boxSizing: 'border-box'
       }}>
-        
-        {/* THE 3-COLUMN GRID */}
         <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: '30px', 
-            width: '100%', 
-            maxWidth: '1400px',
-            maxHeight: '80vh',
-            overflowY: 'auto',
-            paddingRight: '10px'
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '30px', width: '100%', maxWidth: '1400px', maxHeight: '80vh', overflowY: 'auto', paddingRight: '10px'
         }}>
-            
-            {/* COLUMN 1: PROJECTS */}
+            {/* COLUMN 1: PROJECTS (GREEN) */}
             <div style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', padding: '40px', borderRadius: '8px', height: 'fit-content' }}>
                 <h3 style={{ fontFamily: 'monospace', color: '#00ff66', fontSize: '1.2rem', letterSpacing: '2px', borderBottom: '1px solid #333', paddingBottom: '15px', marginBottom: '30px' }}>
                     // PROJECTS
@@ -309,7 +301,7 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* COLUMN 2: TRAININGS */}
+            {/* COLUMN 2: TRAININGS (BLUE) */}
             <div style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', padding: '40px', borderRadius: '8px', height: 'fit-content' }}>
                 <h3 style={{ fontFamily: 'monospace', color: '#00ccff', fontSize: '1.2rem', letterSpacing: '2px', borderBottom: '1px solid #333', paddingBottom: '15px', marginBottom: '30px' }}>
                     // TRAININGS
@@ -328,7 +320,7 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* COLUMN 3: CERTIFICATIONS */}
+            {/* COLUMN 3: CERTIFICATIONS (RED) */}
             <div style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', padding: '40px', borderRadius: '8px', height: 'fit-content' }}>
                 <h3 style={{ fontFamily: 'monospace', color: '#ff3366', fontSize: '1.2rem', letterSpacing: '2px', borderBottom: '1px solid #333', paddingBottom: '15px', marginBottom: '30px' }}>
                     // CERTIFICATIONS
@@ -343,7 +335,6 @@ export default function Home() {
                     ))}
                 </div>
             </div>
-
         </div>
       </div>
 
@@ -359,7 +350,7 @@ export default function Home() {
             // SECURE_CHANNEL_OPEN
           </div>
           <a 
-            href="mailto:aumkar1104@gmail.com"
+            href="/contact"
             style={{ 
                 display: 'inline-block', textDecoration: 'none',
                 background: 'rgba(0, 255, 102, 0.05)', border: '1px solid #00ff66', color: '#00ff66',
@@ -384,6 +375,10 @@ export default function Home() {
       <style jsx>{`
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         @keyframes pulse { 0%, 100% { opacity: 0.5; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-5px); } }
+        @keyframes cyber-boot {
+          0% { opacity: 0; transform: translateY(15px); filter: blur(5px); }
+          100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
       `}</style>
 
     </main>

@@ -6,7 +6,6 @@ import Cursor from "@/components/Cursor";
 
 export default function CertificationsPage() {
   
-  // --- TRAINING DATA ---
   const myTrainings = [
     { 
         name: 'ANDROID DEV PRO: HANDS-ON PROJECTS', 
@@ -14,11 +13,10 @@ export default function CertificationsPage() {
         date: 'JUN 2025', 
         desc: 'Completed comprehensive Android App Development training, gaining hands-on experience designing, developing, and deploying applications from scratch. Implemented Firebase services for efficient data handling and collaborated with a multidisciplinary team to launch a fully functional final project.', 
         stack: ['Android Studio', 'Firebase', 'Teamwork', 'Project Management'],
-        certLink: '/training-cert.pdf' // Replace with your actual PDF filename in the public folder
+        certLink: '/training-cert.pdf'
     }
   ];
 
-  // --- CERTIFICATIONS DATA ---
   const myCerts = [
     { 
         name: 'GENERATIVE AI APPS & SOLUTIONS', 
@@ -49,20 +47,28 @@ export default function CertificationsPage() {
       <Cursor />
       <Navbar />
       
-      {/* 3D Background */}
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
         <Scene />
       </div>
 
-      {/* Main Content - Block Layout */}
+      {/* Main Content - ANIMATION ADDED HERE */}
       <div style={{ 
           position: 'relative', zIndex: 10, paddingTop: '180px', paddingBottom: '100px', 
-          maxWidth: '1000px', width: '90%', margin: '0 auto' 
+          maxWidth: '1000px', width: '90%', margin: '0 auto',
+          animation: 'cyber-boot 0.4s ease-out forwards' /* THE FIX */
       }}>
           
-        <h1 style={{ fontSize: '3rem', fontFamily: 'monospace', color: '#00ff66', borderBottom: '1px solid #333', paddingBottom: '20px', marginBottom: '50px', letterSpacing: '4px' }}>
-          // CREDENTIALS_&_TRAINING
-        </h1>
+        {/* UPGRADED HEADING */}
+        <div style={{ width: '100%', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '20px', marginBottom: '50px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px' }}>
+            <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '2.5rem', fontFamily: 'monospace', color: 'white', margin: 0, letterSpacing: '2px', fontWeight: '300' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00ccff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 8px rgba(0,204,255,0.8))' }}>
+                  <polyline points="13 17 18 12 13 7"></polyline>
+                  <polyline points="6 17 11 12 6 7"></polyline>
+              </svg>
+              CREDENTIALS_&_TRAINING
+              <span style={{ display: 'inline-block', width: '14px', height: '4px', background: '#00ccff', marginBottom: '4px', animation: 'blink 1s step-end infinite', boxShadow: '0 0 8px #00ccff' }}></span>
+            </h1>
+        </div>
 
         {/* --- TRAININGS SECTION --- */}
         <h2 style={{ fontSize: '1.5rem', color: '#00ccff', fontFamily: 'monospace', letterSpacing: '2px', marginBottom: '30px' }}>
@@ -90,7 +96,6 @@ export default function CertificationsPage() {
                       {t.stack.map(s => <span key={s} style={{ background: 'rgba(0,204,255,0.05)', color: '#00ccff', border: '1px solid rgba(0,204,255,0.3)', padding: '6px 12px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '0.8rem' }}>{s}</span>)}
                   </div>
                   
-                  {/* View Certificate Button */}
                   <a href={t.certLink} target="_blank" rel="noopener noreferrer" style={{ 
                       border: '1px solid #555', color: 'white', padding: '10px 20px', textDecoration: 'none', fontFamily: 'monospace', fontSize: '0.9rem', transition: 'all 0.3s', borderRadius: '4px', whiteSpace: 'nowrap'
                   }}
@@ -135,6 +140,13 @@ export default function CertificationsPage() {
         </div>
 
       </div>
+
+      <style jsx>{`
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+      `}</style>
     </main>
   );
 }

@@ -6,29 +6,44 @@ import Cursor from "@/components/Cursor";
 
 export default function ProfilePage() {
   return (
-    <main style={{ width: '100%', minHeight: '100vh', position: 'relative', background: 'black', color: 'white' }}>
+    <main style={{ width: '100%', minHeight: '100vh', position: 'relative', background: '#050505', color: 'white' }}>
       
       <Cursor />
       <Navbar />
       
       {/* 3D Background */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none', opacity: 0.7 }}>
         <Scene />
       </div>
 
-      {/* Main Content - Increased paddingTop to 240px to clear the fixed Navbar */}
-      <div style={{ paddingTop: '240px', paddingBottom: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10, position: 'relative' }}>
+      {/* Main Content - ANIMATION ADDED HERE */}
+      <div style={{ 
+          paddingTop: '240px', paddingBottom: '100px', display: 'flex', flexDirection: 'column', 
+          alignItems: 'center', zIndex: 10, position: 'relative',
+          animation: 'cyber-boot 0.4s ease-out forwards' /* THE FIX */
+      }}>
         <div style={{ width: '90%', maxWidth: '1200px' }}>
           
-          <h1 style={{ fontSize: '2rem', fontFamily: 'monospace', color: '#00ff66', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '20px', marginBottom: '40px', letterSpacing: '4px' }}>
-            // USER_PROFILE : A_AUMKAR
-          </h1>
+          {/* UPGRADED HEADING */}
+          <div style={{ width: '100%', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '20px', marginBottom: '50px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px' }}>
+              <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '2.5rem', fontFamily: 'monospace', color: 'white', margin: 0, letterSpacing: '2px', fontWeight: '300' }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00ccff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 8px rgba(0,204,255,0.8))' }}>
+                    <polyline points="13 17 18 12 13 7"></polyline>
+                    <polyline points="6 17 11 12 6 7"></polyline>
+                </svg>
+                USER_PROFILE
+                <span style={{ display: 'inline-block', width: '14px', height: '4px', background: '#00ccff', marginBottom: '4px', animation: 'blink 1s step-end infinite', boxShadow: '0 0 8px #00ccff' }}></span>
+              </h1>
+              <div style={{ fontFamily: 'monospace', color: '#666', letterSpacing: '2px', fontSize: '0.85rem' }}>
+                  [ ID: A_AUMKAR ]
+              </div>
+          </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '50px', alignItems: 'start' }}>
             
             {/* LEFT COLUMN: CASUAL NARRATIVE */}
             <div style={{ 
-                background: 'rgba(10, 15, 20, 0.8)', border: '1px solid rgba(0, 255, 102, 0.2)', 
+                background: 'rgba(10, 15, 20, 0.8)', border: '1px solid rgba(0, 204, 255, 0.2)', 
                 padding: '40px', borderRadius: '8px', backdropFilter: 'blur(10px)' 
             }}>
                 <h2 style={{ fontSize: '2.5rem', fontWeight: '800', margin: '0 0 20px 0', lineHeight: '1', color: 'white' }}>
@@ -44,7 +59,7 @@ export default function ProfilePage() {
                     <p style={{ marginBottom: '20px' }}>
                         {`> Beyond the code, I believe the best products are built by teams that can adapt quickly and communicate effectively—which comes in handy when you speak four languages! When I'm not glued to my IDE or debugging a tricky API, you will almost certainly find me out on the football pitch.`}
                     </p>
-                    <p style={{ color: '#00ff66', marginTop: '40px', borderLeft: '2px solid #00ff66', paddingLeft: '15px' }}>
+                    <p style={{ color: '#00ccff', marginTop: '40px', borderLeft: '2px solid #00ccff', paddingLeft: '15px' }}>
                         {`> You can grab a copy of my CV over on the right for the full technical breakdown of my stack, certifications, and training history.`}
                     </p>
                 </div>
@@ -57,11 +72,11 @@ export default function ProfilePage() {
                 <div style={{ 
                     width: '100%', maxWidth: '450px',
                     background: 'rgba(0,0,0,0.5)', padding: '10px', 
-                    border: '1px dashed #00ff66', borderRadius: '4px',
+                    border: '1px dashed #00ccff', borderRadius: '4px',
                     position: 'relative', marginBottom: '30px',
-                    boxShadow: '0 0 30px rgba(0, 255, 102, 0.1)'
+                    boxShadow: '0 0 30px rgba(0, 204, 255, 0.1)'
                 }}>
-                    <div style={{ position: 'absolute', top: '-12px', left: '20px', background: 'black', padding: '0 10px', color: '#00ff66', fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                    <div style={{ position: 'absolute', top: '-12px', left: '20px', background: 'black', padding: '0 10px', color: '#00ccff', fontFamily: 'monospace', fontSize: '0.8rem' }}>
                         DOCUMENT_PREVIEW
                     </div>
                     
@@ -82,18 +97,18 @@ export default function ProfilePage() {
                     download="Aumkar_CV.pdf"
                     style={{ 
                         display: 'inline-block', width: '100%', maxWidth: '450px', textAlign: 'center',
-                        background: 'rgba(0, 255, 102, 0.1)', border: '1px solid #00ff66', color: '#00ff66',
+                        background: 'rgba(0, 204, 255, 0.1)', border: '1px solid #00ccff', color: '#00ccff',
                         padding: '15px 30px', fontSize: '1.2rem', fontFamily: 'monospace', cursor: 'pointer',
                         letterSpacing: '3px', textDecoration: 'none', transition: 'all 0.3s'
                     }}
                     onMouseEnter={(e) => {
-                        e.currentTarget.style.background = '#00ff66';
+                        e.currentTarget.style.background = '#00ccff';
                         e.currentTarget.style.color = 'black';
-                        e.currentTarget.style.boxShadow = '0 0 20px #00ff66';
+                        e.currentTarget.style.boxShadow = '0 0 20px #00ccff';
                     }}
                     onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(0, 255, 102, 0.1)';
-                        e.currentTarget.style.color = '#00ff66';
+                        e.currentTarget.style.background = 'rgba(0, 204, 255, 0.1)';
+                        e.currentTarget.style.color = '#00ccff';
                         e.currentTarget.style.boxShadow = 'none';
                     }}
                 >
@@ -105,6 +120,13 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+      `}</style>
     </main>
   );
 }
