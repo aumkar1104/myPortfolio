@@ -23,7 +23,7 @@ export default function CertificationsPage() {
         issuer: 'Udemy', 
         date: 'JUL 2025', 
         desc: 'Built generative AI applications and solutions using no-code tools.',
-        certLink: '/ai-cert.pdf' 
+        certLink: '/ai-cert.jpg' 
     },
     { 
         name: 'CLOUD COMPUTING', 
@@ -37,7 +37,7 @@ export default function CertificationsPage() {
         issuer: 'freeCodeCamp', 
         date: 'APR 2023', 
         desc: 'Completed a rigorous 300-hour developer certification focused on modern CSS, HTML5, and building adaptable, mobile-friendly web architectures.',
-        certLink: '/web-cert.pdf' 
+        certLink: '/web-cert.png' 
     },
   ];
 

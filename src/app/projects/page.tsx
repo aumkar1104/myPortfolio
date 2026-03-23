@@ -13,7 +13,7 @@ export default function ProjectsPage() {
         date: 'OCT 2025', 
         desc: 'A cross-platform location journaling app that lets users save meaningful places with personal notes. Built on a real-time Firebase backend with secure authentication and Firestore for geospatial data storage. Features include interactive OpenStreetMap integration, triple-tap location saving, GPS-based auto-centering, and persistent map state across sessions. Implemented real-time data synchronization ensuring seamless cross-device access, user-specific data isolation through Firebase security rules, and optimized queries for efficient location retrieval.', 
         stack: ['Kotlin', 'Android (Jetpack Compose)', 'Firebase', 'OSMDroid', 'Google Location Services'],
-        github: 'https://github.com/aumkar1104'
+        github: 'https://github.com/aumkar1104/AtlasMe'
     },
     { 
         id: '02',
@@ -21,7 +21,7 @@ export default function ProjectsPage() {
         date: 'JUL 2025', 
         desc: 'SkyNote is a clean and intuitive voice-based note-taking app designed to make capturing ideas effortless. It allows users to record, transcribe, and store notes in real time, ensuring nothing important is missed. Built with a minimal, user-friendly interface and integrated with Firebase for secure storage, SkyNote combines functionality with simplicity. Its smart organization and seamless navigation enhance productivity, making it an ideal tool for fast, voice-driven note management.', 
         stack: ['Java', 'Android Studio', 'XML UI', 'Firebase', 'Speech-to-Text API', 'Material Design'],
-        github: 'https://github.com/aumkar1104'
+        github: 'https://github.com/aumkar1104/skynote'
     }
   ];
 
