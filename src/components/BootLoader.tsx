@@ -2,47 +2,19 @@
 
 import { useState, useEffect } from 'react';
 
-const BOOT_SEQUENCES = [
-  '> MOUNTING_CORE_DRIVE',
-  '> NEURAL_LINK_STABLE',
-  '> ACCESS_GRANTED',
-];
-
 export default function BootLoader({ onComplete }: { onComplete: () => void }) {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [fadeOut, setFadeOut] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    const progressInterval = setInterval(() => {
-      setProgress((p) => {
-        const newProgress = p + 2;
-        if (newProgress >= 100) {
-          clearInterval(progressInterval);
-          setTimeout(() => setFadeOut(true), 200);
-          setTimeout(onComplete, 800);
-          return 100;
-        }
-        return newProgress;
-      });
-    }, 50);
+    // Show the orbital animation for 1.5 seconds before starting exit sequence
+    const timer = setTimeout(() => {
+      setIsExiting(true);
+      // Wait for the exit animation (0.6s) to finish before unmounting
+      setTimeout(onComplete, 600);
+    }, 1500);
 
-    return () => clearInterval(progressInterval);
+    return () => clearTimeout(timer);
   }, [onComplete]);
-
-  useEffect(() => {
-    const textInterval = setInterval(() => {
-      setCurrentStep((step) => {
-        if (step < BOOT_SEQUENCES.length - 1) {
-          return step + 1;
-        }
-        clearInterval(textInterval);
-        return step;
-      });
-    }, 900);
-
-    return () => clearInterval(textInterval);
-  }, []);
 
   return (
     <div
@@ -52,125 +24,53 @@ export default function BootLoader({ onComplete }: { onComplete: () => void }) {
         left: 0,
         width: '100vw',
         height: '100vh',
-        zIndex: 1000,
+        zIndex: 9999,
         background: '#050505',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        opacity: fadeOut ? 0 : 1,
-        transition: 'opacity 0.6s ease-out',
-        pointerEvents: fadeOut ? 'none' : 'auto',
+        overflow: 'hidden',
+        transition: 'opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.7, 0, 0.3, 1)',
+        opacity: isExiting ? 0 : 1,
+        transform: isExiting ? 'scale(20)' : 'scale(1)',
+        pointerEvents: isExiting ? 'none' : 'auto',
       }}
     >
       <style>{`
-        @keyframes glow-pulse {
-          0%, 100% { box-shadow: 0 0 20px #00ff66, inset 0 0 20px rgba(0, 255, 102, 0.1); }
-          50% { box-shadow: 0 0 40px #00ff66, inset 0 0 40px rgba(0, 255, 102, 0.2); }
+        @keyframes spin-cw {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
-        @keyframes text-glow {
-          0%, 100% { text-shadow: 0 0 10px #00ff66; }
-          50% { text-shadow: 0 0 20px #00ff66, 0 0 30px #00ff66; }
+        @keyframes spin-ccw {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(-360deg); }
         }
-        @keyframes scanline {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100vh); }
+        .orbital-circle {
+          position: absolute;
+          border-radius: 50%;
+          border: 1px solid rgba(0, 204, 255, 0.4);
+          box-shadow: 0 0 15px rgba(0, 204, 255, 0.2), inset 0 0 15px rgba(0, 204, 255, 0.1);
+        }
+        .outer-circle {
+          width: 120px;
+          height: 120px;
+          animation: spin-cw 3s linear infinite;
+          border-top-color: #00ccff;
+          border-bottom-color: #00ccff;
+        }
+        .inner-circle {
+          width: 80px;
+          height: 80px;
+          animation: spin-ccw 2s linear infinite;
+          border-left-color: #00ccff;
+          border-right-color: #00ccff;
         }
       `}</style>
 
-      <div
-        style={{
-          width: '400px',
-          padding: '40px',
-          border: '1px solid rgba(0, 255, 102, 0.3)',
-          background: 'rgba(0, 0, 0, 0.8)',
-          animation: 'glow-pulse 2s infinite',
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'monospace',
-            fontSize: '0.8rem',
-            color: '#00ff66',
-            letterSpacing: '3px',
-            marginBottom: '30px',
-            textShadow: '0 0 10px #00ff66',
-          }}
-        >
-          AUMKAR.SYS // v2.026
-        </div>
-
-        <div style={{ marginBottom: '20px', minHeight: '80px' }}>
-          {BOOT_SEQUENCES.slice(0, currentStep + 1).map((text, i) => (
-            <div
-              key={i}
-              style={{
-                fontFamily: 'monospace',
-                fontSize: '1rem',
-                color: i === currentStep ? '#00ff66' : '#00ff66',
-                textShadow: '0 0 10px #00ff66',
-                animation: i === currentStep ? 'text-glow 0.5s infinite' : 'none',
-                marginBottom: '10px',
-                opacity: i < currentStep ? 0.5 : 1,
-              }}
-            >
-              {text}
-              {i === currentStep && (
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '10px',
-                    height: '18px',
-                    backgroundColor: '#00ff66',
-                    marginLeft: '5px',
-                    verticalAlign: 'middle',
-                    animation: 'blink 0.5s infinite',
-                  }}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div
-          style={{
-            width: '100%',
-            height: '4px',
-            background: 'rgba(0, 255, 102, 0.2)',
-            borderRadius: '2px',
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              width: `${progress}%`,
-              height: '100%',
-              background: '#00ff66',
-              boxShadow: '0 0 10px #00ff66, 0 0 20px #00ff66',
-              transition: 'width 0.05s linear',
-            }}
-          />
-        </div>
-
-        <div
-          style={{
-            fontFamily: 'monospace',
-            fontSize: '0.7rem',
-            color: '#666',
-            marginTop: '15px',
-            letterSpacing: '2px',
-          }}
-        >
-          {progress}% COMPLETE
-        </div>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="orbital-circle outer-circle"></div>
+        <div className="orbital-circle inner-circle"></div>
       </div>
-
-      <style>{`
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
-        }
-      `}</style>
     </div>
   );
 }

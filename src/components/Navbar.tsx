@@ -42,8 +42,26 @@ export default function Navbar({ activeSection }: NavbarProps) {
         .nav-link.active {
           color: #00ccff;
           text-shadow: 0 0 10px rgba(0, 204, 255, 0.6);
+          position: relative;
+        }
+
+        .nav-link.active::after {
+          content: "";
+          position: absolute;
+          bottom: -8px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 4px;
+          height: 4px;
+          background: #00ccff;
+          border-radius: 50%;
+          box-shadow: 0 0 8px #00ccff;
         }
       `}</style>
+
+      <Link href="#home" className={`nav-link ${activeSection === 'home' ? 'active' : ''}`}>
+          HOME
+      </Link>
 
       <Link href="#about" className={`nav-link ${activeSection === 'about' ? 'active' : ''}`}>
           ABOUT

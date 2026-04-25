@@ -1,10 +1,13 @@
 'use client';
 
-import Scene from "@/components/Scene";
+import dynamic from 'next/dynamic';
 import Navbar from "@/components/Navbar";
 import Cursor from "@/components/Cursor";
 import BootLoader from "@/components/BootLoader";
-import { useState, useEffect, useMemo, useRef } from 'react';
+import Skeleton from "@/components/Skeleton";
+import { useState, useEffect, useMemo, useRef, Suspense } from 'react';
+
+const Scene = dynamic(() => import("@/components/Scene"), { ssr: false });
 
 export default function Home() {
   const [isHovered, setIsHovered] = useState(false);
@@ -22,6 +25,14 @@ export default function Home() {
 
   // --- NATIVE SCROLL REVEAL HOOK --- 
   useEffect(() => { 
+    // Initial check for active section
+    const handleInitialSection = () => {
+      if (window.scrollY < 100) {
+        setActiveSection('home');
+      }
+    };
+    handleInitialSection();
+
     const observer = new IntersectionObserver( 
       (entries) => { 
         entries.forEach((entry) => { 
@@ -45,7 +56,7 @@ export default function Home() {
         entries.forEach((entry) => {
           const warpTarget = entry.target.querySelector('.z-warp-container');
 
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
             // Update Active Section for Navbar
             setActiveSection(entry.target.id);
 
@@ -73,10 +84,13 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.5 }
+      { 
+        threshold: [0.1, 0.5, 0.8],
+        rootMargin: "-10% 0px -10% 0px"
+      }
     );
 
-    const sections = document.querySelectorAll('section:not(#home)');
+    const sections = document.querySelectorAll('section');
     sections.forEach((s) => glitchObserver.observe(s));
 
     return () => {
@@ -239,12 +253,6 @@ export default function Home() {
     }
   ];
 
-  const myCerts = [
-    { category: 'CERTIFICATION', name: 'GENERATIVE AI APPS', issuer: 'Udemy', date: 'JUL 2025', desc: 'Advanced course on building applications using Generative AI models and LLMs.', stack: ['AI', 'LLM'] },
-    { category: 'CERTIFICATION', name: 'CLOUD COMPUTING', issuer: 'NPTEL', date: 'JUN 2025', desc: 'Comprehensive study of cloud architecture, virtualization, and distributed systems.', stack: ['Cloud', 'Infra'] },
-    { category: 'CERTIFICATION', name: 'RESPONSIVE WEB DESIGN', issuer: 'freeCodeCamp', date: 'APR 2023', desc: 'Certification covering HTML5, CSS3, and modern responsive design principles.', stack: ['Web', 'UI/UX'] },
-  ];
-
   const myCertifications = [ 
     { name: 'GENERATIVE AI APPS', issuer: 'Udemy', date: 'JUL 2025', stack: ['AI', 'LLM'] }, 
     { name: 'CLOUD COMPUTING', issuer: 'NPTEL', date: 'JUN 2025', stack: ['Cloud', 'Infra'] }, 
@@ -338,7 +346,9 @@ export default function Home() {
         <Cursor />
         <div className={`crt-overlay ${isGlitching ? 'is-glitching' : ''}`}></div>
         <Navbar activeSection={activeSection} />
-        {BackgroundScene}
+        <Suspense fallback={<Skeleton />}>
+          {BackgroundScene}
+        </Suspense>
 
         {/* --- SCROLL PROGRESS CLOCK --- */}
         <div 
@@ -401,10 +411,11 @@ export default function Home() {
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin-bottom: 2rem; 
             font-family: monospace; 
-            font-size: 2.5rem; 
+            font-size: clamp(2rem, 8vw, 5rem); 
             color: #00ccff;
             text-transform: uppercase; 
             letter-spacing: 4px; 
+            will-change: transform, opacity;
           } 
           
           .animated-heading.visible { 
@@ -485,6 +496,7 @@ export default function Home() {
               transition: clip-path 0.7s cubic-bezier(0.165, 0.84, 0.44, 1), background 0.5s ease; 
               cursor: pointer; 
               backdrop-filter: blur(5px); 
+              will-change: transform, opacity, clip-path;
           } 
   
           /* Default Split: 60/40 slope */ 
@@ -519,9 +531,9 @@ export default function Home() {
           
           /* FIX 1: Precisely center and resize titles in their respective triangles */ 
           .giant-title { 
-              font-size: clamp(1.5rem, 4vw, 3rem); 
+              font-size: clamp(1.2rem, 4vw, 2.5rem); 
               font-family: monospace; 
-              letter-spacing: 12px; 
+              letter-spacing: 6px; 
               font-weight: 300;
               transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
               position: absolute; 
@@ -530,16 +542,17 @@ export default function Home() {
               z-index: 5;
               pointer-events: none;
               text-shadow: 0 0 20px currentColor;
+              will-change: transform, opacity;
           } 
           
           .left-title { 
-              left: 25%; 
+              left: 20%; 
               transform: translate(-50%, -50%); 
               text-align: center;
           } 
           
           .right-title { 
-              left: 75%; 
+              left: 80%; 
               transform: translate(-50%, -50%); 
               text-align: center;
           } 
@@ -558,21 +571,52 @@ export default function Home() {
   
           .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; } 
           .center-grid { display: flex; justify-content: center; }
-          .glass-card { background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 30px; border-radius: 4px; transition: transform 0.3s; } 
+          .glass-card { background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 30px; border-radius: 4px; transition: transform 0.3s; backdrop-filter: blur(10px); } 
           .glass-card:hover { transform: translateY(-5px); } 
 
-          .drive-link { 
-              display: block; 
-              text-align: center; 
-              margin-top: 40px; 
-              color: #ff3366; 
-              font-family: monospace; 
-              text-decoration: none; 
-              font-size: 0.9rem; 
-              letter-spacing: 2px; 
-              transition: all 0.3s; 
-          } 
-          .drive-link:hover { text-shadow: 0 0 10px #ff3366; text-decoration: underline; }
+          .full-archive-btn {
+              display: block;
+              width: fit-content;
+              margin: 40px auto 0;
+              padding: 15px 30px;
+              font-family: monospace;
+              text-decoration: none;
+              font-size: 0.9rem;
+              letter-spacing: 2px;
+              transition: all 0.3s ease;
+              background: transparent;
+              border: 1px solid;
+              text-align: center;
+          }
+
+          .archive-cyan { border-color: #00ccff; color: #00ccff; }
+          .archive-cyan:hover { background: rgba(0, 204, 255, 0.1); box-shadow: 0 0 20px rgba(0, 204, 255, 0.2); }
+          
+          .archive-crimson { border-color: #ff3366; color: #ff3366; }
+          .archive-crimson:hover { background: rgba(255, 51, 102, 0.1); box-shadow: 0 0 20px rgba(255, 51, 102, 0.2); }
+
+          @media (max-width: 768px) {
+               * { backdrop-filter: none !important; }
+               nav, .glass-card, .cyber-frame, .panel-left.is-expanded, .panel-right.is-expanded, .console-wrapper, .reveal-on-scroll {
+                   background: rgba(5, 8, 12, 0.98) !important;
+               }
+              .diagonal-panel {
+                  clip-path: none !important;
+                  position: relative !important;
+                  height: 50vh !important;
+              }
+              .panel-left.is-hidden, .panel-right.is-hidden {
+                  display: block !important;
+                  clip-path: none !important;
+                  pointer-events: auto !important;
+              }
+              .giant-title {
+                  font-size: clamp(1.5rem, 8vw, 3rem) !important;
+                  left: 50% !important;
+              }
+              .left-title { transform: translate(-50%, -50%); }
+              .right-title { transform: translate(-50%, -50%); }
+          }
   
           /* --- CONTACT SECTION & FORM STYLING --- */
           .console-wrapper {
@@ -824,7 +868,7 @@ export default function Home() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'start' }}>
                     <div>
-                        <h2 style={{ fontSize: '3rem', fontWeight: '800', margin: '0 0 30px 0', lineHeight: '1', color: 'white', textShadow: '0 0 20px rgba(255,255,255,0.3)' }}>
+                        <h2 style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', fontWeight: '800', margin: '0 0 30px 0', lineHeight: '1', color: 'white', textShadow: '0 0 20px rgba(255,255,255,0.3)' }}>
                             COMPUTER SCIENCE<br />ENGINEER
                         </h2>
                         <div style={{ color: '#eee', fontSize: '1.1rem', lineHeight: '1.8', fontFamily: 'monospace' }}>
@@ -936,7 +980,7 @@ export default function Home() {
                   <div className="center-node" style={{ boxShadow: '0 0 15px #00ff66', background: '#00ff66' }}></div> 
                   
                   <div className="observe-me slide-in-right timeline-content text-box pl-padding"> 
-                      <h3 style={{ fontSize: '2.5rem', color: '#00ff66', margin: '0 0 15px 0', fontFamily: 'monospace' }}>ATLAS_ME</h3> 
+                      <h3 style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', color: '#00ff66', margin: '0 0 15px 0', fontFamily: 'monospace' }}>ATLAS_ME</h3> 
                       <p style={{ color: '#aaa', lineHeight: '1.6', marginBottom: '20px' }}>A cross-platform location journaling app that lets users save meaningful places with personal notes. Built on a real-time Firebase backend with secure authentication.</p> 
                       <div style={{ display: 'flex', gap: '10px' }}> 
                           {['Kotlin', 'Firebase', 'OSMDroid'].map(s => <span key={s} style={{ fontSize: '0.8rem', color: '#888', border: '1px solid #333', padding: '4px 8px' }}>{s}</span>)} 
@@ -947,7 +991,7 @@ export default function Home() {
               {/* PROJECT 2: SKYNOTE (Text Left, Image Right) */} 
               <div className="timeline-row row-reverse"> 
                   <div className="observe-me slide-in-left timeline-content text-box pr-padding" style={{ textAlign: 'right' }}> 
-                      <h3 style={{ fontSize: '2.5rem', color: '#00ccff', margin: '0 0 15px 0', fontFamily: 'monospace' }}>SKYNOTE</h3> 
+                      <h3 style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', color: '#00ccff', margin: '0 0 15px 0', fontFamily: 'monospace' }}>SKYNOTE</h3> 
                       <p style={{ color: '#aaa', lineHeight: '1.6', marginBottom: '20px' }}>A clean and intuitive voice-based note-taking app designed to make capturing ideas effortless. Integrated with Speech API and Firebase.</p> 
                       <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}> 
                           {['Java', 'Android', 'Speech API'].map(s => <span key={s} style={{ fontSize: '0.8rem', color: '#888', border: '1px solid #333', padding: '4px 8px' }}>{s}</span>)} 
@@ -984,7 +1028,7 @@ export default function Home() {
                     <div className="expanded-content" style={{ opacity: activePanel === 'TRAININGS' ? 1 : 0, pointerEvents: activePanel === 'TRAININGS' ? 'auto' : 'none' }}> 
                         <button className="close-btn" onClick={(e) => { e.stopPropagation(); setActivePanel('NONE'); }}>[ X ] CLOSE</button> 
                         
-                    <div className="z-warp-container observe-warp">
+                    <div className={`z-warp-container ${activePanel === 'TRAININGS' ? 'is-warped-in' : ''}`}>
                         <div className="cyber-frame" style={{ borderColor: 'rgba(0,204,255,0.3)' }}> 
                             <div className="cyber-corner top-left" style={{ borderColor: '#00ccff' }}></div> 
                             <div className="cyber-corner bottom-right" style={{ borderColor: '#00ccff' }}></div> 
@@ -1001,6 +1045,16 @@ export default function Home() {
                                     ))} 
                                 </div> 
                             </div> 
+
+                            {/* DRIVE ARCHIVE BUTTON */}
+                            <a 
+                                href="https://drive.google.com/drive/u/0/folders/1lVz9-7J4jcibRTniGQ4-a_DGqtCE8Hzm" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="full-archive-btn archive-cyan"
+                            >
+                                {`> ACCESS_FULL_ARCHIVE`}
+                            </a>
                         </div> 
                     </div>
                     </div> 
@@ -1022,31 +1076,32 @@ export default function Home() {
                     <div className="expanded-content" style={{ opacity: activePanel === 'CERTS' ? 1 : 0, pointerEvents: activePanel === 'CERTS' ? 'auto' : 'none' }}> 
                         <button className="close-btn" style={{ color: '#ff3366', borderColor: '#ff3366' }} onClick={(e) => { e.stopPropagation(); setActivePanel('NONE'); }}>[ X ] CLOSE</button> 
                         
-                    <div className="z-warp-container observe-warp">
+                    <div className={`z-warp-container ${activePanel === 'CERTS' ? 'is-warped-in' : ''}`}>
                         <div className="cyber-frame" style={{ borderColor: 'rgba(255,51,102,0.3)' }}> 
                             <div className="cyber-corner top-left" style={{ borderColor: '#ff3366' }}></div> 
                             <div className="cyber-corner bottom-right" style={{ borderColor: '#ff3366' }}></div> 
                             
                             <h3 style={{ color: '#ff3366', fontSize: '2.5rem', marginBottom: '40px', fontFamily: 'monospace' }}>// CERTIFICATIONS</h3> 
-                            <div style={{ display: 'flex', gap: '30px', justifyContent: 'center', flexWrap: 'wrap', width: '100%' }}> 
+                            <div className="card-grid"> 
                                 {myCertifications.map((c, i) => ( 
-                                    <div key={i} className="glass-card" style={{ borderColor: 'rgba(255,51,102,0.3)', flex: '1', minWidth: '300px', maxWidth: '350px' }}> 
+                                    <div key={i} className="glass-card" style={{ borderColor: 'rgba(255,51,102,0.3)' }}> 
                                         <h4 style={{ color: '#fff', fontSize: '1.5rem', margin: '0 0 10px 0' }}>{c.name}</h4> 
                                         <div style={{ color: '#ff3366', fontSize: '0.8rem', fontFamily: 'monospace', marginBottom: '15px' }}>{c.issuer} | {c.date}</div> 
-                                        <div style={{ display: 'flex', gap: '10px' }}> 
-                                            {c.stack.map(s => <span key={s} style={{ color: '#666', fontSize: '0.8rem', fontFamily: 'monospace' }}>#{s}</span>)} 
+                                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}> 
+                                            {c.stack.map(s => <span key={s} style={{ color: '#888', border: '1px solid #333', padding: '2px 8px', fontSize: '0.75rem', fontFamily: 'monospace' }}>{s}</span>)} 
                                         </div> 
                                     </div> 
                                 ))} 
                             </div> 
 
+                            {/* DRIVE ARCHIVE BUTTON */}
                             <a 
                                 href="https://drive.google.com/drive/u/0/folders/1lVz9-7J4jcibRTniGQ4-a_DGqtCE8Hzm" 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="drive-link"
+                                className="full-archive-btn archive-crimson"
                             >
-                                {`> CLICK TO VIEW MORE CERTIFICATES`}
+                                {`> ACCESS_FULL_ARCHIVE`}
                             </a>
                         </div> 
                     </div>
